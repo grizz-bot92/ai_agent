@@ -1,23 +1,19 @@
 from functions.get_files_info import get_files_info
 from functions .get_file_content import get_file_content
-
+from functions.write_file import write_file
 
 def main():
-    result = get_file_content("calculator", "main.py")
-    print("Result from current directory:")
-    print(result)
-    print("")
-
-    result = get_file_content("calculator", "pkg/calculator.py")
-    print("Result from pkg:")
+    result = write_file("calculator", "lorem.txt", "wait, this isn't lorem ipsum")
+    print("lorem test:")
     print(result)
 
-    result = get_file_content("calculator", "/bin/cat")
-    print("Result from bin")
+    result = write_file("calculator", "pkg/morelorem.txt", "lorem ipsum dolor sit amet")
+    print("pkg test:")
     print(result)
 
-    result = get_file_content("calculator", "pkg/does_not_exist.py")
-    print("Result from invalid pkg")
+    result = write_file("calculator", "/tmp/temp.txt", "this should not be allowed")
+    print("temp test:")
     print(result)
+
 if __name__ == "__main__":
     main()
