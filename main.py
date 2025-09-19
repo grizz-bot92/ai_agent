@@ -21,14 +21,31 @@ messages = [
     types.Content(role="user", parts=[types.Part(text=prompt)])
 ]
 
+try:
+    for _ in range(20):
+        response = client.models.generate_content(
+            model='gemini-2.0-flash-001', 
+            contents=messages,
+            config=types.GenerateContentConfig(
+                tools=[available_functions],
+                system_instruction=system_prompt),
+        )
 
-response = client.models.generate_content(
-    model='gemini-2.0-flash-001', 
-    contents=messages,
-    config=types.GenerateContentConfig(
-        tools=[available_functions],
-        system_instruction=system_prompt),
-)
+        function_calls = response.function_calls
+        for candidate in response.candidates:
+            messages.append(candidate.content)
+        if function_calls:
+            for function_call in function_calls:
+                result = call_function(function_call)
+                messages.append(result)
+        elif response.text:
+            print(f"Final response: {response.text}")
+            break
+            
+except Exception as e:
+    print(f"Error: {e}")
+
+
 
 
 if "--verbose" in sys.argv:
